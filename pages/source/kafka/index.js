@@ -1,6 +1,7 @@
 import { Inter } from '@next/font/google'
 import { useState } from 'react'
 import styles from '../../../styles/Home.module.css'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -8,7 +9,7 @@ export default function Kafka() {
     return (
         <main className={styles.main}>
             <div className={styles.center}>
-                <a
+                <Link
                     href="/source/kafka/confluent"
                     className={styles.card}
                 >
@@ -18,8 +19,8 @@ export default function Kafka() {
                     <p className={inter.className}>
                     Using your Confluent Cloud credentials
                     </p>
-                </a>
-                <a
+                </Link>
+                <Link
                     href="/source/kafka/redpanda"
                     className={styles.card}
                     >
@@ -29,8 +30,8 @@ export default function Kafka() {
                     <p className={inter.className}>
                         Using your Redpanda Cloud credentials
                     </p>
-                </a>
-                <a
+                </Link>
+                <Link
                     href="/source/kafka/manual"
                     className={styles.card}
                     >
@@ -40,7 +41,7 @@ export default function Kafka() {
                     <p className={inter.className}>
                         Insert your Kafka config
                     </p>
-                </a>
+                </Link>
             </div>
         </main>
     )
