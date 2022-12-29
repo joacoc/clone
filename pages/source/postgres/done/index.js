@@ -3,7 +3,7 @@ export default function Done(props) {
 
     return (
         <div className='z-30'>
-            <p className="text-4xl text-gray-700">You're now ready and set!</p>
+            <p className="text-4xl text-gray-700">You&apos;re now ready and set!</p>
         </div>
     );
 }
