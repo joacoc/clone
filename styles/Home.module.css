@@ -52,6 +52,7 @@
   background: rgba(var(--card-rgb), 0);
   border: 1px solid rgba(var(--card-border-rgb), 0);
   transition: background 200ms, border 200ms;
+  z-index: 30;
 }
 
 .card span {
@@ -78,6 +79,7 @@
   align-items: center;
   position: relative;
   padding: 4rem 0;
+  margin-top: 5%;
 }
 
 .center::before {

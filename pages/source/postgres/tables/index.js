@@ -1,53 +1,66 @@
-import { Inter } from '@next/font/google'
-import styles from '../../../../styles/Home.module.css'
+import { useState, useEffect } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
-const topics = [
-    "users",
-    "sales",
-    "cdc_mysql",
-    "shopify",
-    "stripe",
-    "comments"
-]
+export default function Tables(props) {
+    const { config, onChange } = props;
+    const [tables, setTables] = useState([]);
 
-export default function Topics() {
-    const onNext = () => {
+    useEffect(() => {
+        if (config) {
+            fetch(`/api/tables`, {
+                body: JSON.stringify({ ...config, database: "postgres", port: "5432" }),
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }).then((r) => {
+                if (r.status === 200) {
+                    r.json().then((data) => {
+                        if (!data || data.error) {
+                            console.error("Error: ", data);
+                        } else {
+                            setTables(data);
+                        }
+                    });
+                } else {
+                    console.error(r);
+                }
+            });
+        }
+    }, [config]);
+
+    const handleOnChange = (event) => {
+        const { target } = event;
+        const { checked, name } = target;
+
+        onChange(name, checked);
     };
 
     return (
-        <main className={styles.main}>
-            <div className={styles.center}>
-                <fieldset>
-                    <legend className="text-lg font-medium text-gray-900">Topics</legend>
-                    <div className="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
-                        {topics.map((topic, topicIdx) => (
-                        <div key={topicIdx} className="relative flex items-start py-4">
+        <div className='z-30'>
+            <fieldset>
+                <legend className="text-lg font-medium text-gray-900">Tables</legend>
+                <div className="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
+                    {tables.map(({ tableName }, tableIdx) => (
+                        <div key={tableIdx} className="relative flex items-start py-4">
                             <div className="min-w-0 flex-1 text-sm">
-                            <label htmlFor={`topic-${topic}`} className="select-none font-medium text-gray-700">
-                                {topic}
+                            <label htmlFor={`table-${tableName}`} className="select-none font-medium text-gray-700">
+                                {tableName}
                             </label>
                             </div>
                             <div className="ml-3 flex h-5 items-center">
                             <input
-                                id={`topic-${topic}`}
-                                name={`topic-${topic}`}
+                                id={`table-${tableName}`}
+                                name={`${tableName}`}
                                 type="checkbox"
                                 className="ml-6 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                onChange={handleOnChange}
                             />
                             </div>
                         </div>
-                        ))}
-                    </div>
-                    <button
-                        type="button"
-                        className="w-fit p-10 mx-auto mt-10 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        onClick={onNext}
-                    >
-                        Replicate
-                    </button>
-                </fieldset>
-            </div>
-        </main>
-    )
+                    ))}
+                </div>
+            </fieldset>
+        </div>
+    );
 }
